@@ -1,59 +1,25 @@
 <div class="container">
   <h1>Enhanced Male Image Prompt Generator</h1>
+  
+  <label for="hairStyle">Select Hair Style:</label>
+  <select id="hairStyle">
+    <option value="short, neatly trimmed hair">Short, neatly trimmed hair</option>
+    <option value="long, wavy hair">Long, wavy hair</option>
+    <option value="curly, voluminous hair">Curly, voluminous hair</option>
+    <option value="bald head">Bald Head</option>
+    <option value="slicked back hair">Slicked back hair</option>
+    <option value="messy, textured hair">Messy, textured hair</option>
+  </select>
 
-  <div class="options">
-    <div class="option-group">
-      <label for="hair-style">Hair Style:</label>
-      <select id="hair-style">
-        <option value="short, neatly trimmed hair">Short, neatly trimmed</option>
-        <option value="long, flowing hair">Long, flowing</option>
-        <option value="curly, voluminous hair">Curly, voluminous</option>
-        <option value="straight, sleek hair">Straight, sleek</option>
-        <option value="a bald head">Bald</option>
-        <option value="wavy, styled hair">Wavy, styled</option>
-        <option value="spiky hair">Spiky</option>
-        <option value="slicked back hair">Slicked back</option>
-        <option value="a buzz cut">Buzz cut</option>
-        <option value="a stylish man bun">Stylish man bun</option>
-      </select>
-    </div>
-
-    <div class="option-group">
-      <label for="environment">Environment:</label>
-      <select id="environment">
-        <option value="urban environment with city background">Urban city</option>
-        <option value="a lush nature setting">Lush nature</option>
-        <option value="a professional indoor studio">Indoor studio</option>
-        <option value="a cozy cafe interior">Cozy cafe</option>
-        <option value="a sunny beach">Sunny beach</option>
-         <option value="a modern office space">Modern office</option>
-      </select>
-    </div>
-
-    <div class="option-group">
-      <label for="photography-style">Photography Style:</label>
-      <select id="photography-style">
-        <option value="professional photography">Professional</option>
-        <option value="street photography style">Street style</option>
-        <option value="studio portrait lighting">Studio portrait</option>
-        <option value="natural light photography">Natural light</option>
-        <option value="cinematic lighting">Cinematic lighting</option>
-      </select>
-    </div>
-
-  </div>
-
-  <button id="generate-btn">Generate Prompt</button>
-
-  <div class="output">
-    <h2>Generated Prompt:</h2>
-    <p id="prompt-output"></p>
-    <button id="copy-btn" class="copy-button">Copy Prompt</button>
-  </div>
-
-  <div class="history">
-    <h2>Previous Prompts:</h2>
-    <ul id="prompt-history">
-      </ul>
-  </div>
+  <label for="imageType">Select Image Type:</label>
+  <select id="imageType">
+    <option value="portrait">Portrait</option>
+    <option value="full body">Full Body</option>
+  </select>
+  
+  <button onclick="generatePrompt()">Generate Prompt</button>
+  
+  <div id="output"></div>
+  
+  <button id="copyBtn" onclick="copyPrompt()" style="display:none;">Copy to Clipboard</button>
 </div>
