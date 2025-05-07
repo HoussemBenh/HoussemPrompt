@@ -1,0 +1,93 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const hairStyleSelect = document.getElementById('hair-style');
+  const environmentSelect = document.getElementById('environment');
+  const photographyStyleSelect = document.getElementById('photography-style');
+  const generateBtn = document.getElementById('generate-btn');
+  const promptOutput = document.getElementById('prompt-output');
+  const copyBtn = document.getElementById('copy-btn');
+  const promptHistoryUl = document.getElementById('prompt-history');
+
+  const clothingItems = [
+    "a casual t-shirt and jeans",
+    "a stylish sweater and chinos",
+    "a sharp jacket and trousers",
+    "a comfortable hoodie and sweatpants",
+    "a classic coat over a shirt",
+    "a tailored suit with a dress shirt",
+    "athletic wear for a workout",
+    "formal evening wear",
+    "a work uniform",
+    "a simple shirt and shorts"
+    // Add more descriptive clothing combinations
+  ];
+
+  const fixedDetails = ", photorealistic, detailed facial features, color grading, soft bokeh.";
+  const fixedBeard = "well trimmed beard";
+  const fixedAgeGender = "A 32 year old man";
+
+  let promptHistory = [];
+  const historyLimit = 5; // Limit the number of previous prompts to display
+
+  // Function to render the prompt history
+  function renderHistory() {
+    promptHistoryUl.innerHTML = ''; // Clear the current list
+
+    promptHistory.forEach(prompt => {
+      const li = document.createElement('li');
+      li.textContent = prompt;
+      promptHistoryUl.appendChild(li);
+    });
+  }
+
+  generateBtn.addEventListener('click', () => {
+    const selectedHairStyle = hairStyleSelect.value;
+    const selectedEnvironment = environmentSelect.value;
+    const selectedPhotographyStyle = photographyStyleSelect.value;
+
+    // Get a random clothing item
+    const randomClothing = clothingItems[Math.floor(Math.random() * clothingItems.length)];
+
+    // Construct the enhanced prompt
+    const prompt =
+      `${fixedAgeGender} with ${selectedHairStyle} and ${fixedBeard}, wearing ${randomClothing}. ${selectedEnvironment}, ${selectedPhotographyStyle}${fixedDetails}`;
+
+    // Display the generated prompt
+    promptOutput.textContent = prompt;
+
+    // Add the generated prompt to the history
+    promptHistory.unshift(prompt); // Add to the beginning
+
+    // Trim the history if it exceeds the limit
+    if (promptHistory.length > historyLimit) {
+      promptHistory = promptHistory.slice(0, historyLimit);
+    }
+
+    // Render the updated history
+    renderHistory();
+  });
+
+  // Copy button functionality
+  copyBtn.addEventListener('click', () => {
+    const promptToCopy = promptOutput.textContent;
+
+    if (promptToCopy) {
+      navigator.clipboard.writeText(promptToCopy).then(() => {
+        // Optional: Provide user feedback
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy Prompt';
+        }, 2000); // Reset button text after 2 seconds
+      }).catch(err => {
+        console.error('Failed to copy prompt: ', err);
+        // Optional: Provide user feedback on failure
+        copyBtn.textContent = 'Copy Failed!';
+         setTimeout(() => {
+          copyBtn.textContent = 'Copy Prompt';
+        }, 2000);
+      });
+    }
+  });
+
+  // Initial render of history (will be empty initially)
+  renderHistory();
+});
