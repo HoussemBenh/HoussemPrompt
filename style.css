@@ -1,93 +1,61 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const hairStyleSelect = document.getElementById('hair-style');
-  const environmentSelect = document.getElementById('environment');
-  const photographyStyleSelect = document.getElementById('photography-style');
-  const generateBtn = document.getElementById('generate-btn');
-  const promptOutput = document.getElementById('prompt-output');
-  const copyBtn = document.getElementById('copy-btn');
-  const promptHistoryUl = document.getElementById('prompt-history');
+const clothingOptions = [
+  "wearing a tailored navy blue suit with a light blue dress shirt",
+  "wearing a charcoal gray hoodie and black jeans",
+  "wearing a white linen shirt with beige trousers",
+  "wearing a black leather jacket over a white t-shirt",
+  "wearing a casual flannel shirt and denim jeans",
+  "wearing a wool overcoat and scarf",
+  "wearing a fitted blazer and turtleneck sweater"
+];
 
-  const clothingItems = [
-    "a casual t-shirt and jeans",
-    "a stylish sweater and chinos",
-    "a sharp jacket and trousers",
-    "a comfortable hoodie and sweatpants",
-    "a classic coat over a shirt",
-    "a tailored suit with a dress shirt",
-    "athletic wear for a workout",
-    "formal evening wear",
-    "a work uniform",
-    "a simple shirt and shorts"
-    // Add more descriptive clothing combinations
-  ];
+const environments = [
+  "urban environment with city background, soft bokeh",
+  "natural outdoor setting with trees and soft sunlight",
+  "studio backdrop with controlled lighting",
+  "evening street scene with neon lights",
+  "modern apartment interior with ambient lighting"
+];
 
-  const fixedDetails = ", photorealistic, detailed facial features, color grading, soft bokeh.";
-  const fixedBeard = "well trimmed beard";
-  const fixedAgeGender = "A 32 year old man";
+const cameraSettings = [
+  "aperture f/1.4, ISO 100, 1/200s, 85mm lens",
+  "aperture f/2.8, ISO 400, 1/125s, 50mm lens",
+  "aperture f/4, ISO 200, 1/100s, 70-200mm lens",
+  "aperture f/1.8, ISO 800, 1/160s, 35mm lens",
+  "aperture f/5.6, ISO 100, 1/250s, 105mm macro lens",
+  "aperture f/2.2, ISO 640, 1/80s, 50mm prime lens"
+];
 
-  let promptHistory = [];
-  const historyLimit = 5; // Limit the number of previous prompts to display
+function getRandomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-  // Function to render the prompt history
-  function renderHistory() {
-    promptHistoryUl.innerHTML = ''; // Clear the current list
+function generatePrompt() {
+  const hairStyle = document.getElementById("hairStyle").value;
+  const imageType = document.getElementById("imageType").value;
+  const clothing = getRandomItem(clothingOptions);
+  const environment = getRandomItem(environments);
+  const camera = getRandomItem(cameraSettings);
 
-    promptHistory.forEach(prompt => {
-      const li = document.createElement('li');
-      li.textContent = prompt;
-      promptHistoryUl.appendChild(li);
+  const subjectDetail = imageType === "portrait"
+    ? "detailed facial features, upper body framing"
+    : "full body visible, pose emphasized, posture and stance included";
+
+  const prompt = `A 32 year old man with ${hairStyle} and well trimmed beard, ${clothing}. ${environment}. Photorealistic, professional photography, color grading, ${subjectDetail}, Nikon Z7 II, ${camera}.`;
+
+  const outputDiv = document.getElementById("output");
+  outputDiv.innerText = prompt;
+
+  document.getElementById("copyBtn").style.display = "inline-block";
+}
+
+function copyPrompt() {
+  const text = document.getElementById("output").innerText;
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      alert("Prompt copied to clipboard!");
+    })
+    .catch(err => {
+      alert("Failed to copy prompt.");
+      console.error(err);
     });
-  }
-
-  generateBtn.addEventListener('click', () => {
-    const selectedHairStyle = hairStyleSelect.value;
-    const selectedEnvironment = environmentSelect.value;
-    const selectedPhotographyStyle = photographyStyleSelect.value;
-
-    // Get a random clothing item
-    const randomClothing = clothingItems[Math.floor(Math.random() * clothingItems.length)];
-
-    // Construct the enhanced prompt
-    const prompt =
-      `${fixedAgeGender} with ${selectedHairStyle} and ${fixedBeard}, wearing ${randomClothing}. ${selectedEnvironment}, ${selectedPhotographyStyle}${fixedDetails}`;
-
-    // Display the generated prompt
-    promptOutput.textContent = prompt;
-
-    // Add the generated prompt to the history
-    promptHistory.unshift(prompt); // Add to the beginning
-
-    // Trim the history if it exceeds the limit
-    if (promptHistory.length > historyLimit) {
-      promptHistory = promptHistory.slice(0, historyLimit);
-    }
-
-    // Render the updated history
-    renderHistory();
-  });
-
-  // Copy button functionality
-  copyBtn.addEventListener('click', () => {
-    const promptToCopy = promptOutput.textContent;
-
-    if (promptToCopy) {
-      navigator.clipboard.writeText(promptToCopy).then(() => {
-        // Optional: Provide user feedback
-        copyBtn.textContent = 'Copied!';
-        setTimeout(() => {
-          copyBtn.textContent = 'Copy Prompt';
-        }, 2000); // Reset button text after 2 seconds
-      }).catch(err => {
-        console.error('Failed to copy prompt: ', err);
-        // Optional: Provide user feedback on failure
-        copyBtn.textContent = 'Copy Failed!';
-         setTimeout(() => {
-          copyBtn.textContent = 'Copy Prompt';
-        }, 2000);
-      });
-    }
-  });
-
-  // Initial render of history (will be empty initially)
-  renderHistory();
-});
+}
